@@ -1,6 +1,6 @@
 # pokemon-app
 
-> prject to hit the pokemon api
+> project to hit the pokemon api
 
 ## Build Setup
 
