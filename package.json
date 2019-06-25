@@ -1,0 +1,21 @@
+{
+  "name": "pokemon-app",
+  "version": "1.0.0",
+  "description": "project to hit the pokemon api",
+  "author": "Abdul Shaikh",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "element-ui": "^2.4.11",
+    "nuxt": "^2.0.0",
+    "pokeapi-js-wrapper": "^1.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
