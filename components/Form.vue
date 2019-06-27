@@ -3,12 +3,16 @@
         <Header />
         <div class="split-container">
             <div class="form-container">
-                <h1>Search for a Pokémon!</h1>
+                <div v-if="state == 'loading'" class="loading">
+                    <img src="http://chittagongit.com/download/49938">
+                </div>
+                <h1 v-else>Search for a Pokémon!</h1>
                 <el-input id="search" placeholder="Pokemon Name" v-model="search" @keyup.enter.native="fetchData" clearable></el-input>
                 <el-button @click="fetchData">Get Pokémon</el-button>
                 <transition name="fade">
                         <Error v-if="error != ''"/>
                 </transition>
+
             </div>
             <PokemonCard v-bind:pokemon="pokemon" id="pokemon-container"/>
         </div>
@@ -33,14 +37,13 @@ const P = new Pokedex.Pokedex();
             return{
                 search: '',
                 pokemon: {},
-                error: ''
+                error: '',
+                state: ''
             }
         },
         methods:{
             fetchData:async function(){
-                if (this.search === ''){
-
-                }
+                this.state = 'loading';
                 try{
                     const pokemon = await P.getPokemonByName(this.search.toLowerCase().replace(/(^\s+|\s+$)/g,''))
                     .then(function(response) {
@@ -49,9 +52,11 @@ const P = new Pokedex.Pokedex();
                     console.log(pokemon)
                     this.error = '';
                     this.pokemon = pokemon;
+                    this.state = '';
                     
                 }catch(e){
                     this.error = e;
+                    this.state = '';
                 }
             }
         }
@@ -61,10 +66,11 @@ const P = new Pokedex.Pokedex();
 
 <style scoped>
 .split-container{
-    display: flex;
+    display: grid;
     width: 100%;
     height: 100%;
     justify-content: space-between;
+    grid-template-columns: 1fr 1fr;
 }
 
 .split-container>*{
@@ -79,9 +85,19 @@ const P = new Pokedex.Pokedex();
     overflow: hidden;
     overflow-y: scroll;
 }
-
 .form-container{
+    text-align:left;
+}
 
+.loading {
+    width: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+.loading>img{
+    height: 100px;
+    width: auto;
 }
 
 .form-container>*{
@@ -93,11 +109,10 @@ const P = new Pokedex.Pokedex();
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity .3s ease-in-out;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    transform: translateY(-100);
-    transition: all .3s ease-in-out;
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
 </style>

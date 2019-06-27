@@ -5,7 +5,7 @@
             <h1> {{ pokemonName }} </h1>
             <Types v-bind:types="pokemon.types"/>
             <h2>Abilities</h2>
-            <p v-for="power in pokemon.abilities" >{{ power.ability.name }}</p>
+            <p v-for="power in pokemon.abilities" >{{ ((power.ability.name).charAt(0).toUpperCase() + power.ability.name.slice(1)) }}</p>
             <Stats v-bind:stats="pokemon.stats"/> 
         </div>
     </div>
@@ -39,7 +39,7 @@ const P = new Pokedex.Pokedex();
 
 <style scoped>
 img{
-    height: 150px;
+    height: 235px;
     width:auto;
 }
 

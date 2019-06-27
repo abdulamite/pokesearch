@@ -17,7 +17,7 @@ export default {};
     padding: 0;
     width: 100%;
     padding: .3rem;
-    background-color:#5e6f75;
+    background-color:#ad312a;
 }
 
 header{

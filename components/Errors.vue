@@ -19,7 +19,7 @@
         border: solid 3px #e53935;
         border-radius: .3rem;
         padding: 1rem;
-        width: 100%;
+        width: 40%;
         margin: auto;
     }
 </style>
