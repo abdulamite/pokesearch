@@ -8,13 +8,11 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
 import Form from '~/components/Form.vue'
 import Header from '~/components/Header.vue'
 
 export default {
   components: {
-    Logo,
     Form,
     Header
   }
@@ -29,6 +27,8 @@ export default {
   display: flex;
   align-items: center;
   text-align: center;
+  position: fixed;
+  overflow-y: hidden;
 }
 
 .title {
@@ -41,11 +41,6 @@ export default {
   letter-spacing: 1px;
 }
 
-#form{
-  margin-top:5rem;
-}
-
-
 .subtitle {
   font-weight: 300;
   font-size: 42px;
@@ -57,4 +52,6 @@ export default {
 .links {
   padding-top: 15px;
 }
+
+
 </style>

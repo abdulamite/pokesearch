@@ -24,6 +24,7 @@ header{
     display: flex;
     text-align: left;
     color: #FAFAFA;
+    max-height: 20vh;
 }
 
 header>img{

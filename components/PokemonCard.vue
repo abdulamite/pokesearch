@@ -4,20 +4,23 @@
             <img  :src="getSprite" :alt="pokemon.id" />
             <h1> {{ pokemonName }} </h1>
             <Types v-bind:types="pokemon.types"/>
+            <h2>Abilities</h2>
             <p v-for="power in pokemon.abilities" >{{ power.ability.name }}</p>
+            <Stats v-bind:stats="pokemon.stats"/> 
         </div>
-        <h1 v-else>Search for a Pokémon!</h1>
     </div>
 </template>
 
 <script>
 import Types from '~/components/Types.vue'
+import Stats from '~/components/Stats.vue'
 const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
 
     export default {
         components:{
-            Types
+            Types,
+            Stats
         },
         props: ['pokemon'],
         computed:{
@@ -40,29 +43,8 @@ img{
     width:auto;
 }
 
-
-.types{
-    display: flex;
-    justify-content: center;
-    margin:.5rem;
-}
-
-.types>p{
-    margin:.3rem;
-    padding:.5rem;
-    border-radius: .2rem;
-}
-
-.rock{
-    background-color:#bcaaa4;
-}
-
-.ground{
-    background-color:#a1887f;
-}
-
-.electric{
-    background-color:#fff176;
+.card{
+    padding:1rem;
 }
 
 

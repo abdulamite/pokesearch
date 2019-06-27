@@ -78,7 +78,12 @@
 .fairy{
     background-color:#f06292;
 }
-
+.water{
+    background-color:#82afe9;
+}
+.normal{
+    background-color:#c5bebe;
+}
 
 
 

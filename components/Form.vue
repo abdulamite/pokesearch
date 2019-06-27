@@ -1,13 +1,17 @@
 <template>
     <div>
         <Header />
-        <PokemonCard v-bind:pokemon="pokemon"/>  
-            <el-input id="search" placeholder="Pokemon Name" v-model="search" @keyup.enter.native="fetchData" clearable ></el-input>
-            <el-button @click="fetchData">Get Pokémon</el-button>
-              <transition name="fade">
-                    <Error v-if="error != ''"/>
-              </transition>
-            
+        <div class="split-container">
+            <div class="form-container">
+                <h1>Search for a Pokémon!</h1>
+                <el-input id="search" placeholder="Pokemon Name" v-model="search" @keyup.enter.native="fetchData" clearable></el-input>
+                <el-button @click="fetchData">Get Pokémon</el-button>
+                <transition name="fade">
+                        <Error v-if="error != ''"/>
+                </transition>
+            </div>
+            <PokemonCard v-bind:pokemon="pokemon" id="pokemon-container"/>
+        </div>
     </div>
 </template>
 
@@ -38,10 +42,11 @@ const P = new Pokedex.Pokedex();
 
                 }
                 try{
-                    const pokemon = await P.getPokemonByName(this.search.toLowerCase())
+                    const pokemon = await P.getPokemonByName(this.search.toLowerCase().replace(/(^\s+|\s+$)/g,''))
                     .then(function(response) {
                     return response;
                     });
+                    console.log(pokemon)
                     this.error = '';
                     this.pokemon = pokemon;
                     
@@ -55,14 +60,36 @@ const P = new Pokedex.Pokedex();
 </script>
 
 <style scoped>
-
-* {
-    margin-top: 1em;
-    margin-bottom: 1em;
+.split-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
 }
 
-.el-input__inner{
-    border:red;
+.split-container>*{
+    width:50vw;
+    height: 100vh;
+    padding:3rem;
+}
+
+#pokemon-container{
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.form-container{
+
+}
+
+.form-container>*{
+    margin:1rem;
+}
+
+.el-input{
+    width: 75%;
 }
 
 .fade-enter-active, .fade-leave-active {
