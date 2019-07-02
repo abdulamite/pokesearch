@@ -17,13 +17,12 @@ export default {};
     padding: 0;
     width: 100%;
     padding: .3rem;
-    background-color:#ad312a;
+
 }
 
 header{
     display: flex;
     text-align: left;
-    color: #FAFAFA;
     max-height: 20vh;
 }
 

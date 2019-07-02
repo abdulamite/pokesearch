@@ -25,6 +25,7 @@ import Error from '~/components/Errors.vue'
 
 const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
+const Vibrant = require('node-vibrant')
 
 
     export default {
@@ -49,10 +50,12 @@ const P = new Pokedex.Pokedex();
                     .then(function(response) {
                     return response;
                     });
+
                     console.log(pokemon)
                     this.error = '';
                     this.pokemon = pokemon;
                     this.state = '';
+
                     
                 }catch(e){
                     this.error = e;
@@ -69,21 +72,20 @@ const P = new Pokedex.Pokedex();
     display: grid;
     width: 100%;
     height: 100%;
-    justify-content: space-between;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 3fr;
 }
 
 .split-container>*{
     width:50vw;
     height: 100vh;
-    padding:3rem;
+
 }
 
+
 #pokemon-container{
-    background-size: cover;
-    background-position: center;
-    overflow: hidden;
-    overflow-y: scroll;
+    border-radius: .4rem;
+    margin-left: 8em;
+    width:75%
 }
 .form-container{
     text-align:left;
