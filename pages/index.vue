@@ -21,6 +21,7 @@ export default {
 
 <style>
 .container {
+  font-family: 'Roboto', sans-serif;
   flex-direction: column;
   margin: 0 auto;
   min-height: 100vh;
@@ -29,7 +30,6 @@ export default {
   text-align: center;
   position: fixed;
   overflow-y: hidden;
-  background: url('https://images.unsplash.com/photo-1428447207228-b396f310848b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80');
 }
 
 .title {

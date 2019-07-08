@@ -65,9 +65,15 @@ img{
 .card{
     height: 100%;
     background:white;
-    padding:2rem;
+    padding:3rem;
     overflow-y: scroll;
+    overflow:auto;
+    border-radius: 1em;
 }
+
+.card::-webkit-scrollbar { 
+    display: none; 
+} 
 
 #pokemon-name{
     font-family: 'DM Serif Display', serif

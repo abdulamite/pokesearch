@@ -7,13 +7,21 @@
                     <img src="http://chittagongit.com/download/49938">
                 </div>
                 <h1 v-else>Search for a Pokémon!</h1>
-                <el-input id="search" placeholder="Pokemon Name" v-model="search" @keyup.enter.native="fetchData" clearable></el-input>
+                <el-input id="search" placeholder="Pokemon Name" v-model="search" @keyup.enter.native="fetchData" v-on:keydown.native="showSuggestions" clearable></el-input>
                 <el-button @click="fetchData">Get Pokémon</el-button>
                 <transition name="fade">
                         <Error v-if="error != ''"/>
                 </transition>
-
+                <div id="search_results">
+                    <div v-for="pokemon in searchResults" v-if="searchResults.length != 809 && searchResults.length > 0" @click="displayPokemon" class="result">
+                            <div class="thumb-image">
+                                <img v-bind:src="'https://img.pokemondb.net/artwork/' + pokemon.toLowerCase() + '.jpg'">
+                            </div>
+                            <p> {{ pokemon }} </p>
+                    </div>
+                </div>    
             </div>
+
             <PokemonCard v-bind:pokemon="pokemon" id="pokemon-container"/>
         </div>
     </div>
@@ -27,6 +35,15 @@ const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
 const Vibrant = require('node-vibrant')
 
+// Pull list of pokemon
+
+async function getPokemon(){
+    const pokemon = fetch('https://raw.githubusercontent.com/sindresorhus/pokemon/8310cd9c1342ece30985fb5883e1090e3c56f4a8/data/en.json')
+    .then(function(response) {
+        return response.json();
+    });
+    return pokemon;
+}
 
     export default {
         components:{
@@ -39,8 +56,14 @@ const Vibrant = require('node-vibrant')
                 search: '',
                 pokemon: {},
                 error: '',
-                state: ''
+                state: '',
+                searchResults: []
             }
+        },
+        computed:{
+            getSprite:function () {
+                return `https://img.pokemondb.net/artwork/${this.pokemon}.jpg`
+            },
         },
         methods:{
             fetchData:async function(){
@@ -61,6 +84,44 @@ const Vibrant = require('node-vibrant')
                     this.error = e;
                     this.state = '';
                 }
+            },
+            displayPokemon:async function(){
+                let clicked = event.target.innerText.toLowerCase();
+                console.log(event.target);
+                console.log(clicked);
+                this.state = 'loading';
+                try{
+                    const pokemon = await P.getPokemonByName(clicked)
+                    .then(function(response) {
+                    return response;
+                    });
+
+                    this.error = '';
+                    this.pokemon = pokemon;
+                    this.state = '';
+                    this.search = clicked;
+                    this.searchResults = [];
+
+                    
+                }catch(e){
+                    this.error = e;
+                    this.state = '';
+                }
+
+            },
+            showSuggestions:async function(){
+                const pokemonList = await getPokemon();
+                let regex = new RegExp("^" + this.search.toLowerCase() + ".*$")
+                let searchResults = []
+                pokemonList.forEach(pokemon => {
+                    if (pokemon.toLowerCase().match(regex))
+                    { 
+                        searchResults.push(pokemon)
+                    }
+                });
+
+                this.searchResults = searchResults;
+                console.log(this.searchResults.length);
             }
         }
 
@@ -109,6 +170,35 @@ const Vibrant = require('node-vibrant')
 .el-input{
     width: 75%;
 }
+
+#search_results{
+    overflow:auto;
+    background-color:#e4eae5;
+    padding:1rem;
+    height:50%;
+    border-radius:.3rem;
+}
+
+.result{
+    padding:1rem;
+    padding-top:2rem;
+    padding-bottom:2rem;
+    background-color:#f8ffff;
+    margin:1rem;
+    border-radius:.3rem;
+    font-weight:bolder;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.result>p{
+    margin-left:1rem;
+}
+
+.result>.thumb-image>img{
+    width: 100px;
+}
+
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .3s ease-in-out;
