@@ -12,8 +12,8 @@
                 <transition name="fade">
                         <Error v-if="error != ''"/>
                 </transition>
-                <div id="search_results">
-                    <div v-for="pokemon in searchResults" v-if="searchResults.length != 809 && searchResults.length > 0" @click="displayPokemon" class="result">
+                <div id="search_results" v-if="searchResults.length != 809 && searchResults.length > 0">
+                    <div v-for="pokemon in searchResults" @click="displayPokemon" class="result">
                             <div class="thumb-image">
                                 <img v-bind:src="'https://img.pokemondb.net/artwork/' + pokemon.toLowerCase() + '.jpg'">
                             </div>
@@ -35,9 +35,8 @@ const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
 const Vibrant = require('node-vibrant')
 
-// Pull list of pokemon
-
-async function getPokemon(){
+// Pull list of pokemon and assign to staticList to cut down network requests
+let staticList = async function getPokemon(){
     const pokemon = fetch('https://raw.githubusercontent.com/sindresorhus/pokemon/8310cd9c1342ece30985fb5883e1090e3c56f4a8/data/en.json')
     .then(function(response) {
         return response.json();
@@ -45,87 +44,91 @@ async function getPokemon(){
     return pokemon;
 }
 
-    export default {
-        components:{
-            PokemonCard,
-            Error
+
+export default {
+    components:{
+        PokemonCard,
+        Error
+    },
+    name: "Form",
+    data(){
+        return{
+            search: '',
+            pokemon: {},
+            error: '',
+            state: '',
+            searchResults: []
+        }
+    },
+    computed:{
+        getSprite:function () {
+            return `https://img.pokemondb.net/artwork/${this.pokemon}.jpg`
         },
-        name: "Form",
-        data(){
-            return{
-                search: '',
-                pokemon: {},
-                error: '',
-                state: '',
-                searchResults: []
-            }
-        },
-        computed:{
-            getSprite:function () {
-                return `https://img.pokemondb.net/artwork/${this.pokemon}.jpg`
-            },
-        },
-        methods:{
-            fetchData:async function(){
-                this.state = 'loading';
-                try{
-                    const pokemon = await P.getPokemonByName(this.search.toLowerCase().replace(/(^\s+|\s+$)/g,''))
-                    .then(function(response) {
-                    return response;
-                    });
-
-                    console.log(pokemon)
-                    this.error = '';
-                    this.pokemon = pokemon;
-                    this.state = '';
-
-                    
-                }catch(e){
-                    this.error = e;
-                    this.state = '';
-                }
-            },
-            displayPokemon:async function(){
-                let clicked = event.target.innerText.toLowerCase();
-                console.log(event.target);
-                console.log(clicked);
-                this.state = 'loading';
-                try{
-                    const pokemon = await P.getPokemonByName(clicked)
-                    .then(function(response) {
-                    return response;
-                    });
-
-                    this.error = '';
-                    this.pokemon = pokemon;
-                    this.state = '';
-                    this.search = clicked;
-                    this.searchResults = [];
-
-                    
-                }catch(e){
-                    this.error = e;
-                    this.state = '';
-                }
-
-            },
-            showSuggestions:async function(){
-                const pokemonList = await getPokemon();
-                let regex = new RegExp("^" + this.search.toLowerCase() + ".*$")
-                let searchResults = []
-                pokemonList.forEach(pokemon => {
-                    if (pokemon.toLowerCase().match(regex))
-                    { 
-                        searchResults.push(pokemon)
-                    }
+    },
+    methods:{
+        fetchData:async function(){
+            this.state = 'loading';
+            try{
+                const pokemon = await P.getPokemonByName(this.search.toLowerCase().replace(/(^\s+|\s+$)/g,''))
+                .then(function(response) {
+                return response;
                 });
 
-                this.searchResults = searchResults;
-                console.log(this.searchResults.length);
-            }
-        }
+                console.log(pokemon)
+                this.error = '';
+                this.pokemon = pokemon;
+                this.state = '';
 
+                
+            }catch(e){
+                this.error = e;
+                this.state = '';
+            }
+        },
+        displayPokemon:async function(){
+            let clicked;
+            if(event.target.nodeName === 'IMG'){
+                clicked = event.target.src.split('.')[2].split('/')[2];
+            }else{
+                clicked = event.target.innerText.toLowerCase();
+            }
+            this.state = 'loading';
+            try{
+                const pokemon = await P.getPokemonByName(clicked)
+                .then(function(response) {
+                return response;
+                });
+
+                this.error = '';
+                this.pokemon = pokemon;
+                this.state = '';
+                this.search = clicked;
+                this.searchResults = [];
+
+                
+            }catch(e){
+                this.error = e;
+                this.state = '';
+            }
+
+        },
+        showSuggestions:async function(){
+            const pokemonList = await staticList().then(b=>{return (b)});
+            let regex = new RegExp("^" + this.search.toLowerCase() + ".*$")
+            let searchResults = []
+            pokemonList.forEach(pokemon => {
+                if (pokemon.toLowerCase().match(regex))
+                { 
+                    searchResults.push(pokemon)
+                }
+            });
+
+            this.searchResults = searchResults;
+            console.log(this.searchResults.length);
+        }
     }
+
+}
 </script>
 
 <style scoped>
@@ -177,6 +180,8 @@ async function getPokemon(){
     padding:1rem;
     height:50%;
     border-radius:.3rem;
+    max-width: 45%;
+    margin:auto;
 }
 
 .result{
