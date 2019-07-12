@@ -12,6 +12,8 @@
                 <Stats v-bind:stats="pokemon.stats"/> 
             </div>
         </div>
+        <div v-else class="pokemon_card-how_to">
+        </div>
     </div>
 </template>
 
@@ -69,11 +71,22 @@ img{
     overflow-y: scroll;
     overflow:auto;
     border-radius: 1em;
+    margin-top:1.5rem;
+    -webkit-box-shadow: -8px 7px 15px -6px rgba(115,103,115,1);
+    -moz-box-shadow: -8px 7px 15px -6px rgba(115,103,115,1);
+    box-shadow: -8px 7px 15px -6px rgba(115,103,115,1);
 }
 
 .card::-webkit-scrollbar { 
     display: none; 
-} 
+}
+
+.pokemon_card-how_to{
+    height: 100%;;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
 
 #pokemon-name{
     font-family: 'DM Serif Display', serif

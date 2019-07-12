@@ -44,6 +44,14 @@ let staticList = async function getPokemon(){
     return pokemon;
 }
 
+let japaneseNameList = async function getPokemon(){
+    const pokemon = fetch('https://raw.githubusercontent.com/sindresorhus/pokemon/8310cd9c1342ece30985fb5883e1090e3c56f4a8/data/ja.json')
+    .then(function(response) {
+        return response.json();
+    });
+    return pokemon;
+}
+
 
 export default {
     components:{
@@ -71,9 +79,8 @@ export default {
             try{
                 const pokemon = await P.getPokemonByName(this.search.toLowerCase().replace(/(^\s+|\s+$)/g,''))
                 .then(function(response) {
-                return response;
+                    return response;
                 });
-
                 console.log(pokemon)
                 this.error = '';
                 this.pokemon = pokemon;
@@ -114,6 +121,7 @@ export default {
         },
         showSuggestions:async function(){
             const pokemonList = await staticList().then(b=>{return (b)});
+            const JapaneseName = await japaneseNameList().then(b=>{return (b)});
             let regex = new RegExp("^" + this.search.toLowerCase() + ".*$")
             let searchResults = []
             pokemonList.forEach(pokemon => {
@@ -124,7 +132,6 @@ export default {
             });
 
             this.searchResults = searchResults;
-            console.log(this.searchResults.length);
         }
     }
 
@@ -142,9 +149,10 @@ export default {
 .split-container>*{
     width:50vw;
     height: 100vh;
-
 }
-
+h1{
+    font-family: 'DM Serif Display', serif
+}
 
 #pokemon-container{
     border-radius: .4rem;
@@ -176,11 +184,11 @@ export default {
 
 #search_results{
     overflow:auto;
-    background-color:#e4eae5;
+    background-color:rgba(157, 198, 247, 0.838);
     padding:1rem;
     height:50%;
     border-radius:.3rem;
-    max-width: 45%;
+    max-width: 50%;
     margin:auto;
 }
 
@@ -201,7 +209,7 @@ export default {
 }
 
 .result>.thumb-image>img{
-    width: 100px;
+    width: 50px;
 }
 
 

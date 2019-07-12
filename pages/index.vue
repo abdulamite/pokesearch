@@ -32,6 +32,10 @@ export default {
   overflow-y: hidden;
 }
 
+#form{
+  background:#FAFAFA
+}
+
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;

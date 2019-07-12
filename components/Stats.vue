@@ -46,6 +46,13 @@ export default {
   border: solid #c8bd65 2px;
 }
 
+tr:first-child>td:nth-child(3)>div{
+  background-color: #4caf50;
+  border: solid #337735 2px;
+}
+
+
+
 h3{
     margin-bottom: 1rem;
     margin-top: 1rem;

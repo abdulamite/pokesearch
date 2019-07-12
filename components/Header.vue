@@ -16,14 +16,17 @@ export default {};
     margin: 0;
     padding: 0;
     width: 100%;
-    padding: .3rem;
-
 }
 
 header{
     display: flex;
     text-align: left;
     max-height: 20vh;
+    background-color:#003A70;
+    margin: 0;
+    padding: .3rem;
+    color:white;
+    font-family: 'Oswald', sans-serif;
 }
 
 header>img{
